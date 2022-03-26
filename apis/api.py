@@ -1,8 +1,11 @@
-from flask import Blueprint, logging
+from flask import Blueprint
 
 from apis.models.equipment import equipment
 from apis.models.vessel import vessel
 from apis.models.model import db
+
+import logging
+
 
 healthcheck_blueprint = Blueprint('healthcheck', __name__)
 vessels_blueprint = Blueprint('vessels', __name__)
