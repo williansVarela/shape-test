@@ -12,7 +12,6 @@ equipments_blueprint = Blueprint('equipments', __name__)
 def list_equipments():
     """List all existing equipments.
         ---
-
         responses:
           200:
             description: OK
@@ -154,3 +153,18 @@ def update_equipment_status():
     logger.info(message)
     return {'message': message}, 201
 
+
+@equipments_blueprint.route('/active', methods=['GET'])
+def active_equipment():
+    """List all active equipments.
+        ---
+        responses:
+          200:
+            description: OK
+    """
+    logging.basicConfig(format='%(levelname)s - %(asctime)s (%(filename)s:%(funcName)s): %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.info('list of active equipments endpoint')
+
+    equipments = Equipment.query.filter_by(active=True).all()
+    return jsonify([equipment.to_dict() for equipment in equipments]), 200

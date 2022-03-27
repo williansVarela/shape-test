@@ -8,7 +8,7 @@ healthcheck_blueprint = Blueprint('healthcheck', __name__)
 @healthcheck_blueprint.route('/', methods=['GET'])
 def healthcheck():
 
-    """Checks if the system is alive
+    """Checks if the system is alive.
         ---
         responses:
           200:
