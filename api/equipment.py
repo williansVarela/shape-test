@@ -168,3 +168,29 @@ def active_equipment():
 
     equipments = Equipment.query.filter_by(active=True).all()
     return jsonify([equipment.to_dict() for equipment in equipments]), 200
+
+
+@equipments_blueprint.route('/<int:equipment_id>', methods=['DELETE'])
+def delete_equipment(equipment_id):
+    """Delete an equipment.
+        ---
+        parameters:
+            - name: equipment_id
+              in: body
+              type: int
+              required: true
+
+        responses:
+          200:
+            description: OK
+          404:
+            description: Not found
+    """
+    logging.basicConfig(format='%(levelname)s - %(asctime)s (%(filename)s:%(funcName)s): %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.info('View equipment endpoint')
+    
+    equipment = Equipment.query.get_or_404(equipment_id)
+    db.session.delete(equipment)
+    db.session.commit()
+    return {'message': f'Equipment {equipment.code} removed successfully!'}, 200
