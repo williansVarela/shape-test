@@ -17,3 +17,17 @@ class Equipment(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f'Equipment <{self.name} - code: {self.code}>'
+
+
+class Operation(db.Model, SerializerMixin):
+    __tablename__ = 'operations'
+
+    serialize_only = ('id', 'equipment_id', 'type', 'cost')
+
+    id = db.Column(db.BigInteger, primary_key=True)
+    equipment_id = db.Column(db.BigInteger, db.ForeignKey('equipments.id'))
+    type = db.Column(db.String(32))
+    cost = db.Column(db.Float)
+
+    def __repr__(self):
+        return f'Operation <{self.id} - code: {self.equipment_id.code}>'
