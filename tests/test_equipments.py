@@ -5,10 +5,10 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 
-from apis.app import create_app
-from apis.models.model import db
-from apis.models.vessel import vessel
-from apis.models.equipment import equipment
+from api.app import create_app
+from config import db
+from api.models.vessel import Vessel
+from api.models.equipment import equipment
 from sqlalchemy import func, or_
 
 
@@ -19,8 +19,8 @@ def app():
     with app.app_context():
         db.create_all()
         Migrate(app, db)
-        vessel_obj1 = vessel(code='MV102')
-        vessel_obj2 = vessel(code='MV101')
+        vessel_obj1 = Vessel(code='MV102')
+        vessel_obj2 = Vessel(code='MV101')
         db.session.add(vessel_obj1)
         db.session.add(vessel_obj2)
         db.session.commit()

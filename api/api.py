@@ -1,14 +1,16 @@
-from flask import Blueprint
+from flask import Blueprint, request, jsonify
 
-from apis.models.equipment import equipment
-from apis.models.vessel import vessel
-from apis.models.model import db
+from api.models.equipment import equipment
+from config import db
 
 import logging
 
 
+def log_info(message):
+    pass
+
+
 healthcheck_blueprint = Blueprint('healthcheck', __name__)
-vessels_blueprint = Blueprint('vessels', __name__)
 equipments_blueprint = Blueprint('equipments', __name__)
 
 
@@ -26,28 +28,6 @@ def healthcheck():
     logger.info('Test the health of the system')
     return 'OK', 200
 
-
-@vessels_blueprint.route('/insert_vessel', methods=['POST'])
-def insert_vessel():
-    """Insert a new vessel
-        ---
-        parameters:
-            - name: code
-              in: body
-              type: string
-              required: true
-        responses:
-          201:
-            description: OK
-          400:
-            description: ERROR
-          409:
-            description: FAIL
-    """
-    logging.basicConfig(format='%(levelname)s - %(asctime)s (%(filename)s:%(funcName)s): %(message)s', level=logging.INFO)
-    logger = logging.getLogger(__name__)
-    logger.info('insert_vessel endpoint')
-    return {'message':'OK'}, 201
 
 @equipments_blueprint.route('/insert_equipment', methods=['POST'])
 def insert_equipment():

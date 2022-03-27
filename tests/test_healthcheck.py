@@ -5,8 +5,8 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 
-from apis.app import create_app
-from apis.models.model import db
+from api.app import create_app
+from config import db
 
 
 @pytest.fixture(scope="module")

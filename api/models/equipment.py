@@ -1,4 +1,4 @@
-from apis.models.model import db
+from config import db
 
 
 class equipment(db.Model):
@@ -10,4 +10,3 @@ class equipment(db.Model):
     code = db.Column(db.String(8), unique=True)
     location = db.Column(db.String(256))
     active = db.Column(db.Boolean)
-

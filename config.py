@@ -1,5 +1,9 @@
 import os
+from flask_sqlalchemy import SQLAlchemy
+
+
 basedir = os.path.abspath(os.path.dirname(__file__))
+db = SQLAlchemy()
 
 class RunConfig(object):
     DEBUG = True
