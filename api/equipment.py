@@ -114,3 +114,43 @@ def insert_equipment():
 
     return {'message':'OK'}, 201
 
+
+@equipments_blueprint.route('/status/inactive', methods=['PUT'])
+def update_equipment_status():
+    """update_equipment_status
+        ---
+        parameters:
+            - name: equipments
+              in: body
+              type: list
+              required: true
+        responses:
+          201:
+            description: returns OK if the equipments were correctly updated
+          400:
+            description: Error
+    """
+    logging.basicConfig(format='%(levelname)s - %(asctime)s (%(filename)s:%(funcName)s): %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.info('Runing')
+
+    data = request.get_json()
+    equipments = data['equipments']
+    # equipments = Equipment.query.filter(Equipment.id.in_(equipment_list)).all()
+
+    logger.info(f'List of equipments: {equipments}')
+    
+    for equipment_code in equipments:
+        equipment = Equipment.query.filter_by(code=equipment_code).first()
+        if equipment:
+            equipment.active = False
+            db.session.commit()
+        else:
+            message_error = f'Equipment {equipment_code} not found.'
+            logger.info(message_error)
+            return {'message': message_error}, 400
+    
+    message = 'All equipments set to inactive'
+    logger.info(message)
+    return {'message': message}, 201
+
