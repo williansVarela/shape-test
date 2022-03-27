@@ -1,9 +1,10 @@
-from flask import Flask
 from flasgger import Swagger
+from flask import Flask
 
-from config import db
-from api.api import healthcheck_blueprint, equipments_blueprint
+from api.api import healthcheck_blueprint
+from api.equipment import equipments_blueprint
 from api.vessel import vessels_blueprint
+from config import db
 
 
 def create_app(app_name='VESSELS', test_config=False, production_conf=False):

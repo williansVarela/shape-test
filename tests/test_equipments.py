@@ -8,7 +8,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 from api.app import create_app
 from config import db
 from api.models.vessel import Vessel
-from api.models.equipment import equipment
+from api.models.equipment import Equipment
 from sqlalchemy import func, or_
 
 
@@ -36,7 +36,7 @@ def test_insert_clean_db(app):
     assert result.get_json().get('message') == 'OK'
     assert result.status_code == 201
     with app.app_context():
-        query = db.session.query(equipment)
+        query = db.session.query(Equipment)
         query_results = db.session.execute(query).all()
         assert len(query_results) == 1
         assert query_results[0][0].vessel_id == 1
@@ -50,7 +50,7 @@ def test_insert_without_vessel_code(app):
     assert result.get_json().get('message') == 'MISSING_PARAMETER'
     assert result.status_code == 400
     with app.app_context():
-        query = db.session.query(equipment)
+        query = db.session.query(Equipment)
         query_results = db.session.execute(query).all()
         assert len(query_results) == 1
 
@@ -59,7 +59,7 @@ def test_insert_without_code(app):
     assert result.get_json().get('message') == 'MISSING_PARAMETER'
     assert result.status_code == 400
     with app.app_context():
-        query = db.session.query(equipment)
+        query = db.session.query(Equipment)
         query_results = db.session.execute(query).all()
         assert len(query_results) == 1
 
@@ -68,7 +68,7 @@ def test_insert_without_location(app):
     assert result.get_json().get('message') == 'MISSING_PARAMETER'
     assert result.status_code == 400
     with app.app_context():
-        query = db.session.query(equipment)
+        query = db.session.query(Equipment)
         query_results = db.session.execute(query).all()
         assert len(query_results) == 1
 
@@ -77,6 +77,6 @@ def test_insert_without_name(app):
     assert result.get_json().get('message') == 'MISSING_PARAMETER'
     assert result.status_code == 400
     with app.app_context():
-        query = db.session.query(equipment)
+        query = db.session.query(Equipment)
         query_results = db.session.execute(query).all()
         assert len(query_results) == 1
