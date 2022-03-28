@@ -44,3 +44,7 @@ def test_insert_replicated(app):
         query = db.session.query(func.count(Vessel.code))
         query_results = db.session.execute(query).all()
         assert query_results[0][0] == 1
+
+def test_operation_check(app):
+    result = app.test_client().get('/vessel/operation/costs')
+    assert result.status_code == 200

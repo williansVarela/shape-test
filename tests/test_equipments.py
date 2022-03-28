@@ -9,7 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 from sqlalchemy import func, or_
 
 from api.app import create_app
-from api.models.equipment import Equipment
+from api.models.equipment import Equipment, Operation
 from api.models.vessel import Vessel
 from config import db
 
@@ -82,3 +82,24 @@ def test_insert_without_name(app):
         query = db.session.query(Equipment)
         query_results = db.session.execute(query).all()
         assert len(query_results) == 1
+
+def test_insert_operation(app):
+    result = app.test_client().post('/equipment/operation', json={"code": "5310B9D7", "type": "replacement", "cost": "1000"})
+    assert result.get_json().get('message') == 'OK'
+    assert result.status_code == 201
+    with app.app_context():
+        query = db.session.query(Operation)
+        query_results = db.session.execute(query).all()
+        assert len(query_results) == 1
+
+def test_operation_by_name(app):
+    result = app.test_client().post('/equipment/operation/costs', json={'name': 'compressor'})
+    assert result.status_code == 200
+
+def test_operation_by_code(app):
+    result = app.test_client().post('/equipment/operation/costs', json={'code': '5310B9D7'})
+    assert result.status_code == 200
+
+def test_operation_without_filter(app):
+    result = app.test_client().post('/equipment/operation/costs', json={})
+    assert result.status_code == 400
