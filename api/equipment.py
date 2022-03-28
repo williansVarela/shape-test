@@ -117,9 +117,9 @@ def insert_equipment():
     return {'message':'OK'}, 201
 
 
-@equipments_blueprint.route('/status/inactive', methods=['PUT'])
+@equipments_blueprint.route('/inactive', methods=['PUT'])
 def update_equipment_status():
-    """update_equipment_status
+    """Update a list of equipments to status inactive.
         ---
         parameters:
             - name: equipments

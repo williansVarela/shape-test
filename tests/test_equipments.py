@@ -88,7 +88,7 @@ def test_status_active(app):
     assert result.status_code == 200
 
 def test_status_inactive(app):
-    result = app.test_client().put('/equipment/status/inactive', json={"equipments": ["5310B9D7"]})
+    result = app.test_client().put('/equipment/inactive', json={"equipments": ["5310B9D7"]})
     assert result.get_json().get('message') == 'OK'
     assert result.status_code == 201
 
