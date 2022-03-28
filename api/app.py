@@ -1,7 +1,7 @@
 from flasgger import Swagger
 from flask import Flask
 
-from api.api import healthcheck_blueprint
+from api.healthcheck import healthcheck_blueprint
 from api.equipment import equipments_blueprint
 from api.vessel import vessels_blueprint
 from config import db
