@@ -83,6 +83,15 @@ def test_insert_without_name(app):
         query_results = db.session.execute(query).all()
         assert len(query_results) == 1
 
+def test_status_active(app):
+    result = app.test_client().get('/equipment/active')
+    assert result.status_code == 200
+
+def test_status_inactive(app):
+    result = app.test_client().put('/equipment/status/inactive', json={"equipments": ["5310B9D7"]})
+    assert result.get_json().get('message') == 'OK'
+    assert result.status_code == 201
+
 def test_insert_operation(app):
     result = app.test_client().post('/equipment/operation', json={"code": "5310B9D7", "type": "replacement", "cost": "1000"})
     assert result.get_json().get('message') == 'OK'

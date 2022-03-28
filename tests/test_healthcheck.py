@@ -24,8 +24,6 @@ def app():
         db.session.remove()
         db.drop_all()
 
-
 def test_heath_check(app):
     result = app.test_client().get('/')
     assert result.status_code == 200
-
