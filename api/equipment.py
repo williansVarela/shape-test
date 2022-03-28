@@ -1,4 +1,4 @@
-from api.models.equipment import Equipment
+from api.models.equipment import Equipment, Operation
 from api.models.vessel import Vessel
 from flask import Blueprint, request, jsonify
 from config import db
@@ -25,7 +25,7 @@ def list_equipments():
 
 
 @equipments_blueprint.route('/<int:equipment_id>', methods=['GET'])
-def view_vessel(equipment_id):
+def view_equipment(equipment_id):
     """Retrieve information about one equipment, specified in the URL.
         ---
         parameters:
@@ -194,3 +194,19 @@ def delete_equipment(equipment_id):
     db.session.delete(equipment)
     db.session.commit()
     return {'message': f'Equipment {equipment.code} removed successfully!'}, 200
+
+
+@equipments_blueprint.route('/operation', methods=['GET'])
+def list_operations():
+    """List all existing operations.
+        ---
+        responses:
+          200:
+            description: OK
+    """
+    logging.basicConfig(format='%(levelname)s - %(asctime)s (%(filename)s:%(funcName)s): %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.info('list of operation endpoint')
+
+    operations = Operation.query.all()
+    return jsonify([obj.to_dict() for obj in operations]), 200
