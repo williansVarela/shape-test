@@ -1,14 +1,16 @@
+import os
+import sys
+
 import pytest
 from flask_migrate import Migrate
 
-import sys
-import os
 sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 
-from api.app import create_app
-from config import db
-from api.models.vessel import Vessel
 from sqlalchemy import func
+
+from api.app import create_app
+from api.models.vessel import Vessel
+from config import db
 
 
 @pytest.fixture(scope="module")

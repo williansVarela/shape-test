@@ -1,7 +1,8 @@
 from flask import Flask
-from config import RunConfig
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+
+from config import RunConfig
 
 app = Flask(__name__)
 app.config.from_object(RunConfig)

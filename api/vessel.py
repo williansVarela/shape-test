@@ -1,11 +1,12 @@
-from api.models.vessel import Vessel
-from api.models.equipment import Equipment, Operation
-from flask import Blueprint, request, jsonify
-from config import db
-from sqlalchemy import exc
-from sqlalchemy.sql import func
 import logging
 
+from flask import Blueprint, jsonify, request
+from sqlalchemy import exc
+from sqlalchemy.sql import func
+
+from api.models.equipment import Equipment, Operation
+from api.models.vessel import Vessel
+from config import db
 
 vessels_blueprint = Blueprint('vessels', __name__)
 

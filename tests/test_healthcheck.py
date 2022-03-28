@@ -1,8 +1,9 @@
+import os
+import sys
+
 import pytest
 from flask_migrate import Migrate
 
-import sys
-import os
 sys.path.append(os.path.join(os.path.dirname(__file__),'../'))
 
 from api.app import create_app

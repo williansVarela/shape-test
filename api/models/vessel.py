@@ -1,5 +1,6 @@
-from config import db
 from sqlalchemy_serializer import SerializerMixin
+
+from config import db
 
 
 class Vessel(db.Model, SerializerMixin):

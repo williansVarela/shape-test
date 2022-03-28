@@ -2,7 +2,6 @@ import logging
 
 from flask import Blueprint
 
-
 healthcheck_blueprint = Blueprint('healthcheck', __name__)
 
 @healthcheck_blueprint.route('/', methods=['GET'])
