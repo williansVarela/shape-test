@@ -210,3 +210,58 @@ def list_operations():
 
     operations = Operation.query.all()
     return jsonify([obj.to_dict() for obj in operations]), 200
+
+
+@equipments_blueprint.route('/operation', methods=['POST'])
+def operation_equipment():
+    """Add an operation order related to a equipment.
+        ---
+        parameters:
+            - name: code
+              in: body
+              type: string
+              required: true
+            - name: replacement
+              in: body
+              type: string
+              required: true
+            - name: cost
+              in: body
+              type: float
+              required: true
+        responses:
+          201:
+            description: returns OK if the operation was correctly created.
+          400:
+            description: There was a parsing or validation error in the request.
+          500:
+            description: Error
+    """
+    logging.basicConfig(format='%(levelname)s - %(asctime)s (%(filename)s:%(funcName)s): %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.info('Operation endpoint')
+
+    data = request.get_json()
+    equipment = Equipment.query.filter_by(code=data['code']).first()
+    logger.info(f"Equipment: {equipment}")
+    
+    if not equipment:
+        return {'message': 'Equipment code is not valid'}, 400
+
+    try:
+        operation = Operation(
+            equipment_id = equipment.id,
+            type = data['type'],
+            cost = data['cost']
+        )
+        db.session.add(operation)
+        db.session.commit()
+    except KeyError:
+        return {'message': 'Invalid body'}, 400
+    except:
+        message = 'An unhandled exception occurred.'
+        return {'message': message}, 500
+
+    logger.info('Operation added successfully')
+
+    return {'message':'OK'}, 201
