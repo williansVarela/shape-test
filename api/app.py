@@ -1,9 +1,9 @@
 from flasgger import Swagger
 from flask import Flask
 
-from api.healthcheck import healthcheck_blueprint
-from api.equipment import equipments_blueprint
-from api.vessel import vessels_blueprint
+from api.routes.healthcheck import healthcheck_blueprint
+from api.routes.equipment import equipments_blueprint
+from api.routes.vessel import vessels_blueprint
 from config import db
 
 
