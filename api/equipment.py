@@ -265,3 +265,40 @@ def operation_equipment():
     logger.info('Operation added successfully')
 
     return {'message':'OK'}, 201
+
+
+@equipments_blueprint.route('/operation/costs', methods=['POST'])
+def costs_operations():
+    """Returns the total cost in operation of an equipment.
+        ---
+        parameters:
+            - name: code
+              in: body
+              type: string
+              required: false
+            - name: name
+              in: body
+              type: string
+              required: false
+        responses:
+          200:
+            description: OK
+          400:
+            description: There was a parsing or validation error in the request.
+    """
+    logging.basicConfig(format='%(levelname)s - %(asctime)s (%(filename)s:%(funcName)s): %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.info('Total cost in operation endpoint')
+
+    data = request.get_json()
+    
+    if 'code' in data.keys():
+        operations = Operation.query.join(Equipment).filter(Equipment.code==data['code']).all()
+        costs = [operation.cost for operation in operations]
+        return {'message': f'Total cost: {sum(costs)}'}, 200
+    elif 'name' in data.keys():
+        operations = Operation.query.join(Equipment).filter(Equipment.name==data['name']).all()
+        costs = [operation.cost for operation in operations]
+        return {'message': f'Total cost: {sum(costs)}'}, 200
+
+    return 'Code or Name not found in the request', 400
