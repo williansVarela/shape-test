@@ -83,15 +83,16 @@ def insert_equipment():
     logger = logging.getLogger(__name__)
     logger.info('Insert equipment endpoint')
 
-    data = request.get_json()
-    vessel_id = Vessel.query.get(data['vessel_id'])
-    
-    if not vessel_id:
-        return {'message': 'Vessel ID is not valid'}, 400
-
     try:
+        data = request.get_json()
+        vessel = Vessel.query.filter_by(code=data['vessel_code']).first()
+        
+        if not vessel:
+            logger.info(f"Vessel code {data['vessel_code']} not found")
+            return {'message': 'ERROR'}, 400
+
         equipment = Equipment(
-            vessel_id = data['vessel_id'],
+            vessel_id = vessel.id,
             name = data['name'],
             code = data['code'],
             location = data['location'],
@@ -100,14 +101,15 @@ def insert_equipment():
         db.session.add(equipment)
         db.session.commit()
     except KeyError:
-        return {'message': 'Invalid body'}, 400
+        return {'message': 'ERROR'}, 400
     except exc.IntegrityError:
         message = f"Code {data['code']} already exists"
         logger.info(message)
-        return {'message': message}, 409
+        return {'message': 'FAIL'}, 409
     except:
         message = 'An unhandled exception occurred.'
-        return {'message': message}, 500
+        logger.info(message)
+        return {'message': 'ERROR'}, 500
 
     logger.info('Equipment created successfully')
 
