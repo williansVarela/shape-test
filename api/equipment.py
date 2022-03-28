@@ -153,7 +153,7 @@ def update_equipment_status():
     
     message = 'All equipments set to inactive'
     logger.info(message)
-    return {'message': message}, 201
+    return {'message': 'OK'}, 201
 
 
 @equipments_blueprint.route('/active', methods=['GET'])
@@ -195,7 +195,7 @@ def delete_equipment(equipment_id):
     equipment = Equipment.query.get_or_404(equipment_id)
     db.session.delete(equipment)
     db.session.commit()
-    return {'message': f'Equipment {equipment.code} removed successfully!'}, 200
+    return {'message': f'OK'}, 200
 
 
 @equipments_blueprint.route('/operation', methods=['GET'])
@@ -244,13 +244,15 @@ def operation_equipment():
     logger.info('Operation endpoint')
 
     data = request.get_json()
-    equipment = Equipment.query.filter_by(code=data['code']).first()
-    logger.info(f"Equipment: {equipment}")
-    
-    if not equipment:
-        return {'message': 'Equipment code is not valid'}, 400
 
     try:
+        equipment = Equipment.query.filter_by(code=data['code']).first()
+        logger.info(f"Equipment: {equipment}")
+        
+        if not equipment:
+            logger.info('Equipment code is not valid')
+            return {'message': 'ERROR'}, 400
+
         operation = Operation(
             equipment_id = equipment.id,
             type = data['type'],
@@ -303,4 +305,5 @@ def costs_operations():
         costs = [operation.cost for operation in operations]
         return {'message': f'Total cost: {sum(costs)}'}, 200
 
-    return 'Code or Name not found in the request', 400
+    logger.info('Code or Name not found in the request')
+    return 'ERROR', 400

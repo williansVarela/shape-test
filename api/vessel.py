@@ -81,14 +81,15 @@ def insert_vessel():
         db.session.add(vessel)
         db.session.commit()
     except KeyError:
-        return {'message': 'Invalid body'}, 400
+        return {'message': 'ERROR'}, 400
     except exc.IntegrityError:
         message = f"Code {data['code']} already exists"
         logger.info(message)
-        return {'message': message}, 409
+        return {'message': 'FAIL'}, 409
     except:
         message = 'An unhandled exception occurred.'
-        return {'message': message}, 500
+        logger.info(message)
+        return {'message': 'ERROR'}, 500
 
     logger.info('Vessel created successfully')
 
@@ -118,7 +119,7 @@ def delete_vessel(vessel_id):
     vessel = Vessel.query.get_or_404(vessel_id)
     db.session.delete(vessel)
     db.session.commit()
-    return {'message': f'Vessel {vessel.code} removed successfully!'}, 200
+    return {'message': 'OK'}, 200
 
 
 @vessels_blueprint.route('/operation/costs', methods=['GET'])

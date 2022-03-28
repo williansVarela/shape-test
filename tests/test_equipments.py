@@ -32,7 +32,7 @@ def app():
         db.drop_all()
 
 def test_insert_clean_db(app):
-    result = app.test_client().post('/equipment/insert_equipment', json={'vessel_code':'MV102', 'code':'5310B9D7', 'location':'brazil', 'name':'compressor'})
+    result = app.test_client().post('/equipment', json={'vessel_code':'MV102', 'code':'5310B9D7', 'location':'brazil', 'name':'compressor'})
     assert result.get_json().get('message') == 'OK'
     assert result.status_code == 201
     with app.app_context():
@@ -46,8 +46,8 @@ def test_insert_clean_db(app):
         assert query_results[0][0].name == 'compressor'
 
 def test_insert_without_vessel_code(app):
-    result = app.test_client().post('/equipment/insert_equipment', json={'code':'5310B9D7', 'location':'brazil', 'name':'compressor'})
-    assert result.get_json().get('message') == 'MISSING_PARAMETER'
+    result = app.test_client().post('/equipment', json={'code':'5310B9D7', 'location':'brazil', 'name':'compressor'})
+    assert result.get_json().get('message') == 'ERROR'
     assert result.status_code == 400
     with app.app_context():
         query = db.session.query(Equipment)
@@ -55,8 +55,8 @@ def test_insert_without_vessel_code(app):
         assert len(query_results) == 1
 
 def test_insert_without_code(app):
-    result = app.test_client().post('/equipment/insert_equipment', json={'vessel_code':'MV102', 'location':'brazil', 'name':'compressor'})
-    assert result.get_json().get('message') == 'MISSING_PARAMETER'
+    result = app.test_client().post('/equipment', json={'vessel_code':'MV102', 'location':'brazil', 'name':'compressor'})
+    assert result.get_json().get('message') == 'ERROR'
     assert result.status_code == 400
     with app.app_context():
         query = db.session.query(Equipment)
@@ -64,8 +64,8 @@ def test_insert_without_code(app):
         assert len(query_results) == 1
 
 def test_insert_without_location(app):
-    result = app.test_client().post('/equipment/insert_equipment', json={'vessel_code':'MV102', 'code':'5310B9D7', 'name':'compressor'})
-    assert result.get_json().get('message') == 'MISSING_PARAMETER'
+    result = app.test_client().post('/equipment', json={'vessel_code':'MV102', 'code':'5310B9D7', 'name':'compressor'})
+    assert result.get_json().get('message') == 'ERROR'
     assert result.status_code == 400
     with app.app_context():
         query = db.session.query(Equipment)
@@ -73,8 +73,8 @@ def test_insert_without_location(app):
         assert len(query_results) == 1
 
 def test_insert_without_name(app):
-    result = app.test_client().post('/equipment/insert_equipment', json={'vessel_code':'MV102', 'code':'5310B9D7', 'location':'brazil'})
-    assert result.get_json().get('message') == 'MISSING_PARAMETER'
+    result = app.test_client().post('/equipment', json={'vessel_code':'MV102', 'code':'5310B9D7', 'location':'brazil'})
+    assert result.get_json().get('message') == 'ERROR'
     assert result.status_code == 400
     with app.app_context():
         query = db.session.query(Equipment)

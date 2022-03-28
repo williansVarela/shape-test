@@ -26,7 +26,7 @@ def app():
         db.drop_all()
 
 def test_insert_clean_db(app):
-    result = app.test_client().post('/vessel/insert_vessel', json={'code':'MV102'})
+    result = app.test_client().post('/vessel', json={'code':'MV102'})
     assert result.get_json().get('message') == 'OK'
     assert result.status_code == 201
     with app.app_context():
@@ -35,7 +35,7 @@ def test_insert_clean_db(app):
         assert query_results[0][0] == 'MV102'
 
 def test_insert_replicated(app):
-    result = app.test_client().post('/vessel/insert_vessel', json={'code':'MV102'})
+    result = app.test_client().post('/vessel', json={'code':'MV102'})
     assert result.get_json().get('message') == 'FAIL'
     assert result.status_code == 409
     with app.app_context():
