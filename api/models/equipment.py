@@ -30,4 +30,4 @@ class Operation(db.Model, SerializerMixin):
     cost = db.Column(db.Float)
 
     def __repr__(self):
-        return f'Operation <{self.id} - code: {self.equipment_id.code}>'
+        return f'Operation <{self.id} - type: {self.type}>'
