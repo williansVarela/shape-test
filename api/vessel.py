@@ -1,7 +1,9 @@
 from api.models.vessel import Vessel
+from api.models.equipment import Equipment, Operation
 from flask import Blueprint, request, jsonify
 from config import db
 from sqlalchemy import exc
+from sqlalchemy.sql import func
 import logging
 
 
@@ -117,3 +119,20 @@ def delete_vessel(vessel_id):
     db.session.delete(vessel)
     db.session.commit()
     return {'message': f'Vessel {vessel.code} removed successfully!'}, 200
+
+
+@vessels_blueprint.route('/operation/costs', methods=['GET'])
+def costs_operations_vessel():
+    """Returns the average cost in operation in each vessel.
+        ---
+        responses:
+          200:
+            description: OK
+    """
+    logging.basicConfig(format='%(levelname)s - %(asctime)s (%(filename)s:%(funcName)s): %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.info('Average cost in operation in vessels endpoint')
+
+    vessels = Operation.query.join(Equipment).join(Vessel).with_entities(Vessel.code.label('Vessel'), func.avg(Operation.cost).label('Average Cost')).group_by(Vessel.code).all()
+
+    return jsonify([{vessel['Vessel']: vessel['Average Cost']} for vessel in vessels]), 200
